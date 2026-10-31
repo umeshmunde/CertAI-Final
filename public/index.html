@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Certificate Extraction & Automation System">
+    <title>AI Certificate Extractor | Major Project</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="app-content">
+        <nav class="navbar glass-nav">
+            <div class="nav-brand">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                    stroke="url(#gradient-stroke)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="gradient-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a5b4fc" />
+                            <stop offset="50%" stop-color="#ec4899" />
+                            <stop offset="100%" stop-color="#8b5cf6" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span class="brand-text">Certi<span class="highlight">AI</span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-item active" data-target="home">Home</a></li>
+                <li><a href="#dashboard" class="nav-item" data-target="dashboard">Dashboard</a></li>
+                <li><a href="#extractor" class="nav-item" data-target="extractor">App</a></li>
+                <li><a href="#history" class="nav-item" data-target="history">All Records</a></li>
+                <li><a href="#reports-generator" class="nav-item" data-target="reports-generator">Report Generator</a></li>
+                <li><a href="#reports" class="nav-item" data-target="reports">Achievements</a></li>
+                <li><a href="#analytics" class="nav-item" data-target="analytics">Learner Analytics</a></li>
+                <li><a href="#about" class="nav-item" data-target="about">About</a></li>
+            </ul>
+            <div class="user-auth-widget" style="display: flex; align-items: center; gap: 8px;">
+                <button type="button" id="open-keys-modal-btn" class="nav-key-action-btn" title="Configure 3–4 Gemini API Keys for Rotation">
+                    <span class="key-icon-spin">🔑</span>
+                    <span class="btn-label">API Keys</span>
+                    <span id="nav-keys-count-badge" class="badge-keys-count warning">0 Keys</span>
+                </button>
+                <button type="button" id="open-deploy-modal-btn" class="nav-deploy-action-btn" title="View Netlify & Cloud Deployment Guide">
+                    <span>🚀 Deploy</span>
+                </button>
+                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 600; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
+                    <span>⚡</span> Open Faculty Access
+                </span>
+            </div>
+            <div class="mobile-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </div>
+        </nav>
+
+        <main class="content-wrapper">
+
+            <!-- PAGE 1: HOME -->
+            <section id="home" class="page-section active">
+                <div class="hero-container">
+                    <div class="hero-content">
+                        <span class="badge">Next Generation OCR</span>
+                        <h1 class="gradient-text hero-title">Transform Certificates into Data. instantly.</h1>
+                        <p class="hero-subtitle">Upload any certificate image or provide a Google Drive link, and let
+                            our advanced AI extract structured information into Excel. Powered by Google Gemini.</p>
+                        <div class="hero-actions">
+                            <button class="btn-primary cta-btn" data-target="extractor">
+                                Get Started
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                            <button class="btn-outline cta-btn" data-target="about">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="mockup-card glassmorphism">
+                            <div class="mockup-header">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-line w-80"></div>
+                                <div class="mockup-line w-60"></div>
+                                <div class="mockup-image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                        fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="mockup-stats">
+                                    <div class="stat-box">Name: Jane Doe</div>
+                                    <div class="stat-box">Event: Hackathon</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: DASHBOARD (OVERVIEW & ANALYTICS) -->
+            <section id="dashboard" class="page-section">
+                <div class="section-container wide">
+                    <div class="section-header flex-header">
+                        <div>
+                            <h2 class="gradient-text">Activity & Analytics Dashboard</h2>
+                            <p>Overview of all uploaded certificates categorized by IT/Software, Internships, Hackathons, Research, and Competitions.</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-secondary" id="refresh-dashboard-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                                Refresh Analytics
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Metric Cards Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-purple">
+                                📊
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Total Uploads</span>
+                                <h3 id="stat-total-uploads" class="stat-value">0</h3>
+                                <span class="stat-subtext">Certificates Processed</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-blue">
+                                💻
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">IT & Tech</span>
+                                <h3 id="stat-it-count" class="stat-value">0</h3>
+                                <span class="stat-subtext">Software & Tech Courses</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-emerald">
+                                💼
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Internships</span>
+                                <h3 id="stat-internship-count" class="stat-value">0</h3>
+                                <span class="stat-subtext">Industry Experience</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-amber">
+                                🏆
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Hackathons</span>
+                                <h3 id="stat-hackathon-count" class="stat-value">0</h3>
+                                <span class="stat-subtext">Competitions & Coding</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-rose">
+                                🔬
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Research & Papers</span>
+                                <h3 id="stat-research-count" class="stat-value">0</h3>
+                                <span class="stat-subtext">Publications & Symposiums</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-cyan">
+                                🎓
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Workshops</span>
+                                <h3 id="stat-workshop-count" class="stat-value">0</h3>
+                                <span class="stat-subtext">Trainings & Seminars</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div class="charts-grid" style="margin-top: 2rem;">
+                        <div class="card glassmorphism chart-card">
+                            <h3 class="chart-title">Activity Event Breakdown</h3>
+                            <div class="chart-container">
+                                <canvas id="eventDistributionChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card glassmorphism chart-card">
+                            <h3 class="chart-title">Domain & Field Distribution</h3>
+                            <div class="chart-container">
+                                <canvas id="domainBreakdownChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level & Achievement Charts Row -->
+                    <div class="charts-grid" style="margin-top: 2rem;">
+                        <div class="card glassmorphism chart-card">
+                            <h3 class="chart-title">Academic & Event Level</h3>
+                            <div class="chart-container">
+                                <canvas id="levelDistributionChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card glassmorphism chart-card">
+                            <h3 class="chart-title">Achievements & Recognition</h3>
+                            <div class="chart-container">
+                                <canvas id="achievementChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Category Filter & Live Records Section -->
+                    <div class="card glassmorphism" style="margin-top: 2rem;">
+                        <div class="section-header flex-header" style="margin-bottom: 1.5rem;">
+                            <h3>Filter Records by Category</h3>
+                            <div class="category-pills">
+                                <button class="pill-btn active" data-filter="all">All</button>
+                                <button class="pill-btn" data-filter="IT">IT & Tech</button>
+                                <button class="pill-btn" data-filter="Internship">Internships</button>
+                                <button class="pill-btn" data-filter="Hackathon">Hackathons</button>
+                                <button class="pill-btn" data-filter="Research">Research</button>
+                                <button class="pill-btn" data-filter="Workshop">Workshops</button>
+                                <button class="pill-btn" data-filter="Competition">Competitions</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table id="dashboard-filtered-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Event Category</th>
+                                        <th>Domain</th>
+                                        <th>Organized By</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Achievement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- PAGE 2: EXTRACTOR -->
+            <section id="extractor" class="page-section">
+                <div class="section-container wide">
+                    <div class="section-header text-center">
+                        <h2 class="gradient-text">Extraction Engine</h2>
+                        <p>Upload individual files, select a folder of 200–400 certificates, upload a ZIP archive, or provide a Google Drive link.</p>
+                    </div>
+
+                    <div style="max-width: 850px; margin: 0 auto;">
+                        <!-- Faculty Multi-Key Quick Status Banner -->
+                        <div class="api-key-banner glassmorphism" id="extractor-key-banner">
+                            <div class="banner-left">
+                                <div class="banner-icon-pulse">⚡</div>
+                                <div class="banner-text">
+                                    <div class="banner-title-row">
+                                        <strong id="banner-title">Faculty Multi-Key Engine</strong>
+                                        <span id="banner-keys-status-badge" class="badge-status-pill warning">⚠️ 0 Keys Configured</span>
+                                    </div>
+                                    <p id="banner-desc">Enter 3–4 Gemini API keys for seamless round-robin rotation, multiplying batch speed and preventing 429 rate limits.</p>
+                                </div>
+                            </div>
+                            <div class="banner-actions">
+                                <button type="button" id="banner-manage-keys-btn" class="btn-sm btn-primary">
+                                    ⚙️ Enter 3–4 Keys
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Mode Selector Tabs -->
+                        <div class="upload-tabs-container">
+                            <button type="button" class="upload-tab active" data-mode="files">
+                                📂 Multi-File & Folder Selection (200-400 Certs)
+                            </button>
+                            <button type="button" class="upload-tab" data-mode="zip">
+                                📦 ZIP Archive (.zip)
+                            </button>
+                            <button type="button" class="upload-tab" data-mode="drive">
+                                🔗 Google Drive Link / Folder
+                            </button>
+                        </div>
+
+                        <div class="card glassmorphism form-container">
+                            <form id="extraction-form">
+
+                                <!-- Multi-File / Folder Upload Input -->
+                                <div class="form-group upload-group" id="group-files">
+                                    <div class="form-header-flex">
+                                        <label for="imageUpload" id="upload-label">Upload Certificate Images / Folder</label>
+                                        <label class="folder-toggle-switch">
+                                            <input type="checkbox" id="folderModeCheckbox">
+                                            <span class="switch-slider"></span>
+                                            <span class="switch-label">Select Entire Folder Mode</span>
+                                        </label>
+                                    </div>
+                                    <div class="file-upload-wrapper">
+                                        <input type="file" id="imageUpload" name="image"
+                                            accept="image/png, image/jpeg, image/webp" multiple />
+                                        <div class="file-upload-placeholder">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                <polyline points="17 8 12 3 7 8"></polyline>
+                                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                                            </svg>
+                                            <span id="file-chosen-text">Drag & drop 200–400 certificates or click to browse</span>
+                                            <span class="file-hint">Supports JPG, PNG, WEBP | Bulk Multi-File & Folder Selection</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ZIP Archive Input -->
+                                <div class="form-group upload-group hidden" id="group-zip">
+                                    <label for="zipUpload">Upload ZIP Archive (.zip containing certificates)</label>
+                                    <div class="file-upload-wrapper">
+                                        <input type="file" id="zipUpload" name="zipFile" accept=".zip" />
+                                        <div class="file-upload-placeholder">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                            </svg>
+                                            <span id="zip-chosen-text">Drag & drop .ZIP file or click to browse</span>
+                                            <span class="file-hint">Supports .zip archives containing 200–400 images</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Google Drive Link Input -->
+                                <div class="form-group upload-group hidden" id="group-drive">
+                                    <label for="driveLink">Google Drive File or Folder URL</label>
+                                    <div class="input-with-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+                                            </path>
+                                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+                                            </path>
+                                        </svg>
+                                        <input type="url" id="driveLink" name="driveLink"
+                                            placeholder="Paste Google Drive File or Folder Link (e.g. drive.google.com/drive/folders/...)" />
+                                    </div>
+                                    <span class="file-hint" style="margin-top: 8px; display: block;">Supports public Google Drive folder links containing 200–400 certificate files.</span>
+                                </div>
+
+                                <div class="btn-group-flex" style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                                    <button type="submit" id="submit-btn" class="btn-primary btn-glow" style="flex: 2; margin-top: 0;">
+                                        <span class="btn-text">Start Extraction Process</span>
+                                        <span class="loader" style="display: none;"></span>
+                                    </button>
+                                    <button type="button" id="clear-db-btn" class="btn-outline" style="flex: 1; margin-top: 0; border-color: #ef4444; color: #ef4444;" title="Clear old cached records so you can start a fresh certificate extraction">
+                                        🗑️ Clear Cache / Reset Excel
+                                    </button>
+                                </div>
+                            </form>
+                            <div id="status-message" class="status-message hidden"></div>
+                        </div>
+
+                        <!-- Live Batch Progress Dashboard -->
+                        <div id="batch-progress-section" class="card glassmorphism hidden" style="margin-top: 2rem;">
+                            <div class="batch-header">
+                                <div class="batch-title-group">
+                                    <span class="batch-badge pulsing">⚡ Batch Engine Active</span>
+                                    <h3 id="batch-status-heading">Processing Certificates...</h3>
+                                </div>
+                                <div class="batch-actions">
+                                    <button type="button" id="batch-pause-btn" class="btn-secondary btn-sm">Pause</button>
+                                    <button type="button" id="batch-cancel-btn" class="btn-outline btn-sm" style="border-color: var(--error-color); color: var(--error-color);">Cancel</button>
+                                </div>
+                            </div>
+
+                            <div class="progress-bar-wrapper">
+                                <div class="progress-bar-container">
+                                    <div id="batch-progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
+                                </div>
+                                <div class="progress-percent-text" id="batch-percent-text">0%</div>
+                            </div>
+
+                            <div class="batch-metrics-grid">
+                                <div class="metric-chip">
+                                    <span class="metric-label">Total Selected</span>
+                                    <span id="batch-total-count" class="metric-val">0</span>
+                                </div>
+                                <div class="metric-chip chip-success">
+                                    <span class="metric-label">Processed</span>
+                                    <span id="batch-processed-count" class="metric-val">0</span>
+                                </div>
+                                <div class="metric-chip chip-info">
+                                    <span class="metric-label">Duplicates Cached</span>
+                                    <span id="batch-duplicate-count" class="metric-val">0</span>
+                                </div>
+                                <div class="metric-chip chip-danger">
+                                    <span class="metric-label">Errors</span>
+                                    <span id="batch-error-count" class="metric-val">0</span>
+                                </div>
+                            </div>
+
+                            <div class="batch-log-container">
+                                <div class="log-header">Live Batch Processing Console</div>
+                                <div id="batch-log-list" class="log-list">
+                                    <div class="log-item info">Initializing batch queue...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="latest-result-section" class="card glassmorphism hidden" style="margin-top: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Latest Extraction</h3>
+                        <div class="table-responsive">
+                            <table id="latest-result-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Activity / Event</th>
+                                        <th>Organized By</th>
+                                        <th>Domain</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Venue</th>
+                                        <th>Level</th>
+                                        <th>Rank / Position</th>
+                                        <th>Achievement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Latest result dynamically injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="latest-raw-text-container" style="margin-top: 1.5rem;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 3: HISTORY / ALL RECORDS -->
+            <section id="history" class="page-section">
+                <div class="section-container wide">
+                    <div class="section-header flex-header">
+                        <div>
+                            <h2 class="gradient-text">Extracted Records</h2>
+                            <p>View and manage all your processed certificate data.</p>
+                        </div>
+                        <div class="action-buttons">
+                            <a href="/api/download-excel" id="download-excel-btn" class="btn-secondary" download>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                                </svg>
+                                Export to Excel
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card glassmorphism">
+                        <div id="empty-state" class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="3" y1="9" x2="21" y2="9"></line>
+                                <line x1="9" y1="21" x2="9" y2="9"></line>
+                            </svg>
+                            <h3>No Records Found</h3>
+                            <p>You haven't extracted any certificates yet during this session.</p>
+                            <button class="btn-outline cta-btn mt-4" data-target="extractor">Go to Extractor</button>
+                        </div>
+
+                        <div id="results-content" class="hidden">
+                            <div class="table-responsive">
+                                <table id="results-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Event Type</th>
+                                            <th>Organized By</th>
+                                            <th>Domain</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Venue</th>
+                                            <th>Level</th>
+                                            <th>Drive</th>
+                                            <th>Rank / Position</th>
+                                            <th>Achievement</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Results dynamically injected here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: CUSTOM REPORT GENERATOR (STUDENT & FACULTY REPORTS) -->
+            <section id="reports-generator" class="page-section">
+                <div class="section-container wide">
+                    <div class="section-header flex-header">
+                        <div>
+                            <h2 class="gradient-text">Custom Report Generator</h2>
+                            <p>Generate & export custom reports for Faculty Development Programs (FDP), Student Merit, Workshops, and Departmental Accreditations.</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="download-report-excel-btn" class="btn-primary">
+                                📊 Export Report to Excel
+                            </button>
+                            <button id="print-report-pdf-btn" class="btn-secondary">
+                                📄 Print / Save PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card glassmorphism" style="margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Filter Report Parameters</h3>
+                        <div class="report-filters-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+                            
+                            <div class="form-group">
+                                <label for="report-participant-type">Participant Role</label>
+                                <select id="report-participant-type" class="custom-select" style="width:100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.03); font-family: 'Inter', sans-serif;">
+                                    <option value="all">All Roles (Student & Faculty)</option>
+                                    <option value="Student">Student Certificates</option>
+                                    <option value="Faculty">Faculty / Staff Certificates</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="report-event-type">Event Category</label>
+                                <select id="report-event-type" class="custom-select" style="width:100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.03); font-family: 'Inter', sans-serif;">
+                                    <option value="all">All Event Categories</option>
+                                    <option value="FDP">FDP / Faculty Development</option>
+                                    <option value="Internship">Internships</option>
+                                    <option value="Hackathon">Hackathons & Competitions</option>
+                                    <option value="Paper">Research & Papers</option>
+                                    <option value="Workshop">Workshops & Seminars</option>
+                                    <option value="Certification">Courses & Certifications</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card glassmorphism">
+                        <div class="section-header flex-header" style="margin-bottom: 1rem;">
+                            <h3>Generated Report Preview</h3>
+                            <span id="report-count-badge" class="badge">0 Records Found</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="custom-reports-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Event Type</th>
+                                        <th>Organized By</th>
+                                        <th>Domain</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Venue</th>
+                                        <th>Level</th>
+                                        <th>Drive Link</th>
+                                        <th>Rank / Position</th>
+                                        <th>Achievement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic custom report rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 4: REPORTS / TOP PERFORMERS & MERIT RECORDS -->
+            <section id="reports" class="page-section">
+                <div class="section-container wide">
+                    <div class="section-header flex-header">
+                        <div>
+                            <h2 class="gradient-text">Merit & Achievement Records</h2>
+                            <p>Accurate tracking of student ranks, positions, winners, runners-up, and distinction records.</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-primary" id="export-top-performers-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right:8px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                                </svg>
+                                Download Formatted Excel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Merit KPI Metric Cards Grid -->
+                    <div class="stats-grid" style="margin-bottom: 2rem;">
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-purple">
+                                🏆
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Total Merit Records</span>
+                                <h3 id="merit-stat-total" class="stat-value">0</h3>
+                                <span class="stat-subtext">High Achievers</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-amber">
+                                🥇
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">1st Rank / Winners</span>
+                                <h3 id="merit-stat-1st" class="stat-value">0</h3>
+                                <span class="stat-subtext">Gold Medalists & 1st Place</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-blue">
+                                🥈
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Runners-Up</span>
+                                <h3 id="merit-stat-runners" class="stat-value">0</h3>
+                                <span class="stat-subtext">2nd & 3rd Place Finishers</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphism hover-lift">
+                            <div class="stat-icon-bg bg-emerald">
+                                🎖️
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Distinction & Honors</span>
+                                <h3 id="merit-stat-distinction" class="stat-value">0</h3>
+                                <span class="stat-subtext">High Score & Excellence</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glassmorphism">
+                        <!-- Filters & Search Toolbar -->
+                        <div class="merit-toolbar" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div class="category-pills">
+                                <button class="pill-btn rank-filter-btn active" data-rank-filter="all">All Merit</button>
+                                <button class="pill-btn rank-filter-btn" data-rank-filter="1st">🥇 1st Rank / Winner</button>
+                                <button class="pill-btn rank-filter-btn" data-rank-filter="runner">🥈/🥉 Runners-Up</button>
+                                <button class="pill-btn rank-filter-btn" data-rank-filter="distinction">🎖️ Distinction</button>
+                            </div>
+                            <div class="input-with-icon" style="max-width: 300px; width: 100%;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" id="merit-search-input" placeholder="Search achiever name or event..." style="padding-left: 2.5rem; height: 42px;" />
+                            </div>
+                        </div>
+
+                        <div id="reports-empty-state" class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                            </svg>
+                            <h3>No Top Performers Found</h3>
+                            <p>Upload certificates with merit, winner, or rank achievements to populate this section.</p>
+                        </div>
+
+                        <div id="reports-content" class="hidden">
+                            <div class="table-responsive">
+                                <table id="reports-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student Name</th>
+                                            <th>Rank / Position</th>
+                                            <th>Achievement</th>
+                                            <th>Event & Details</th>
+                                            <th>Domain</th>
+                                            <th>Organized By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Top performer results dynamically injected here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 5: LEARNER ANALYTICS (MANAGEMENT) -->
+            <section id="analytics" class="page-section">
+                <div class="section-container wide">
+                    <div class="section-header text-center">
+                        <h2 class="gradient-text">Learner Analytics Dashboard</h2>
+                        <p>Search for a student to evaluate their complete credential timeline and skill profile.</p>
+                    </div>
+
+                    <div class="search-container glassmorphism"
+                        style="max-width: 600px; margin: 0 auto 3rem auto; padding: 2rem;">
+                        <div class="form-group">
+                            <label for="student-search">Search Student Name</label>
+                            <div class="input-with-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="input-icon">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" id="student-search" placeholder="Type student name (e.g., Umesh)..."
+                                    autocomplete="off" />
+                            </div>
+                        </div>
+                        <div id="search-suggestions" class="suggestions-dropdown hidden"></div>
+                    </div>
+
+                    <div id="analytics-content" class="hidden">
+                        <div class="profile-header card glassmorphism" style="margin-bottom: 2rem;">
+                            <div class="profile-info">
+                                <div class="profile-avatar">
+                                    <span id="profile-initials">UN</span>
+                                </div>
+                                <div>
+                                    <h2 id="profile-name" class="gradient-text" style="font-size: 2.5rem; margin: 0;">
+                                        Student Name</h2>
+                                    <p id="profile-stats" style="color: var(--text-secondary);">Total Credentials: 0 |
+                                        Dominant Domain: N/A</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analytics-grid">
+                            <div class="card glassmorphism">
+                                <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="var(--primary-color)" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                    </svg>
+                                    Credential Timeline
+                                </h3>
+                                <div id="timeline-container" class="timeline">
+                                    <!-- Timeline items injected here -->
+                                </div>
+                            </div>
+
+                            <div class="card glassmorphism">
+                                <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M12 20.94c1.88-1.55 3.77-3.08 5.1-5.1 1.2-1.82 1.6-3.97 1.14-6.05-.46-2.09-1.32-4.02-2.54-5.77-1.22-1.75-2.71-3.32-4.45-4.64a.75.75 0 0 0-.9 0c-1.74 1.32-3.23 2.89-4.45 4.64a13.3 13.3 0 0 0-2.54 5.77c-.46 2.08-.06 4.23 1.14 6.05 1.33 2.02 3.22 3.55 5.1 5.1a.75.75 0 0 0 .9 0z" />
+                                    </svg>
+                                    Evaluation Summary
+                                </h3>
+                                <div id="skills-summary">
+                                    <!-- Skill badges and breakdown -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="analytics-empty" class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <h3>Search to Start</h3>
+                        <p>Enter a student's name above to see their digital credentials management view.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 6: ABOUT -->
+            <section id="about" class="page-section">
+                <div class="section-container">
+                    <div class="section-header text-center">
+                        <h2 class="gradient-text">About The Project</h2>
+                        <p>Major Project Implementation combining AI and Web Technologies.</p>
+                    </div>
+
+                    <div class="about-grid">
+                        <div class="card glassmorphism hover-lift">
+                            <div class="about-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                    fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M12 2v20"></path>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <h3>The Problem</h3>
+                            <p>Manually entering information from hundreds of certificates into a spreadsheet is
+                                tedious, time-consuming, and prone to human error. Institutions need a better way to
+                                archive achievements.</p>
+                        </div>
+
+                        <div class="card glassmorphism hover-lift">
+                            <div class="about-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                    fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 16v-4"></path>
+                                    <path d="M12 8h.01"></path>
+                                </svg>
+                            </div>
+                            <h3>Our Solution</h3>
+                            <p>We built CertiAI, an intelligent web application that uses Google's latest Gemini AI
+                                models to analyze images, understand context, and accurately map certificate visual data
+                                into structured Excel formats instantly.</p>
+                        </div>
+
+                        <div class="card glassmorphism hover-lift">
+                            <div class="about-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                    fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                    <polyline points="2 17 12 22 22 17"></polyline>
+                                    <polyline points="2 12 12 17 22 12"></polyline>
+                                </svg>
+                            </div>
+                            <h3>Tech Stack</h3>
+                            <ul class="tech-list">
+                                <li><strong>Frontend:</strong> HTML5, CSS3 Glassmorphism, Vanilla JS</li>
+                                <li><strong>Backend:</strong> Node.js, Express</li>
+                                <li><strong>AI Engine:</strong> Google Gemini 2.5 Flash API</li>
+                                <li><strong>Data Handling:</strong> Multer, ExcelJS</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2026 AI Certificate Extractor. Major Project.</p>
+        </footer>
+
+        <!-- End App Content -->
+    </div>
+
+
+
+    <!-- FACULTY AI API KEYS MODAL OVERLAY -->
+    <div id="keys-modal-overlay" class="login-modal-overlay hidden">
+        <div class="login-modal-card keys-modal-card">
+            <button type="button" id="keys-modal-close-btn" class="login-modal-close-btn" title="Close">&times;</button>
+            <div class="login-modal-header">
+                <div class="login-badge-icon" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.15)); border-color: rgba(99, 102, 241, 0.3);">
+                    <span style="font-size: 2rem;">🔑</span>
+                </div>
+                <h2>Faculty AI Key Manager</h2>
+                <p>Configure 3–4 Google Gemini API keys for seamless round-robin rotation. Avoid 429 rate limit errors when extracting bulk certificates.</p>
+            </div>
+
+            <!-- Multi-Key Explanation Banner -->
+            <div class="keys-info-alert">
+                <div class="alert-icon">⚡</div>
+                <div class="alert-content">
+                    <strong>Why Enter 3–4 Keys?</strong>
+                    <p>Google Gemini Free Tier allows 15 requests/minute per key. Adding 3–4 keys multiplies your throughput to 60+ requests/min and automatically fails over if any key hits quota.</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Key Slots Header -->
+            <div class="keys-slots-header">
+                <div class="keys-slots-title">
+                    <span>Google Gemini API Keys (Rotated)</span>
+                    <span id="keys-pool-count-pill" class="badge-status-pill info">4 Slots</span>
+                </div>
+                <button type="button" id="add-key-slot-btn" class="btn-sm btn-ghost" title="Add another API key slot">+ Add Key</button>
+            </div>
+
+            <!-- Dynamic Key Input Rows -->
+            <div id="gemini-keys-container" class="gemini-keys-list">
+                <!-- Slot 1 -->
+                <div class="key-slot-row" data-index="0">
+                    <div class="key-slot-header">
+                        <span class="key-slot-label">Gemini Key #1 (Primary)</span>
+                        <span class="key-status-badge untested" id="key-status-0">⚪ Not Tested</span>
+                    </div>
+                    <div class="input-with-icon-right">
+                        <input type="password" class="key-input" id="key-input-0" placeholder="AIzaSy..." autocomplete="off" />
+                        <button type="button" class="key-eye-btn" data-target="key-input-0" title="Toggle visibility">👁️</button>
+                        <button type="button" class="key-clear-btn" data-target="key-input-0" title="Clear key">&times;</button>
+                    </div>
+                </div>
+                <!-- Slot 2 -->
+                <div class="key-slot-row" data-index="1">
+                    <div class="key-slot-header">
+                        <span class="key-slot-label">Gemini Key #2</span>
+                        <span class="key-status-badge untested" id="key-status-1">⚪ Not Tested</span>
+                    </div>
+                    <div class="input-with-icon-right">
+                        <input type="password" class="key-input" id="key-input-1" placeholder="AIzaSy..." autocomplete="off" />
+                        <button type="button" class="key-eye-btn" data-target="key-input-1" title="Toggle visibility">👁️</button>
+                        <button type="button" class="key-clear-btn" data-target="key-input-1" title="Clear key">&times;</button>
+                    </div>
+                </div>
+                <!-- Slot 3 -->
+                <div class="key-slot-row" data-index="2">
+                    <div class="key-slot-header">
+                        <span class="key-slot-label">Gemini Key #3</span>
+                        <span class="key-status-badge untested" id="key-status-2">⚪ Not Tested</span>
+                    </div>
+                    <div class="input-with-icon-right">
+                        <input type="password" class="key-input" id="key-input-2" placeholder="AIzaSy..." autocomplete="off" />
+                        <button type="button" class="key-eye-btn" data-target="key-input-2" title="Toggle visibility">👁️</button>
+                        <button type="button" class="key-clear-btn" data-target="key-input-2" title="Clear key">&times;</button>
+                    </div>
+                </div>
+                <!-- Slot 4 -->
+                <div class="key-slot-row" data-index="3">
+                    <div class="key-slot-header">
+                        <span class="key-slot-label">Gemini Key #4</span>
+                        <span class="key-status-badge untested" id="key-status-3">⚪ Not Tested</span>
+                    </div>
+                    <div class="input-with-icon-right">
+                        <input type="password" class="key-input" id="key-input-3" placeholder="AIzaSy..." autocomplete="off" />
+                        <button type="button" class="key-eye-btn" data-target="key-input-3" title="Toggle visibility">👁️</button>
+                        <button type="button" class="key-clear-btn" data-target="key-input-3" title="Clear key">&times;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced AI & Backend Settings -->
+            <details class="keys-advanced-details">
+                <summary class="keys-advanced-summary">⚙️ Advanced AI & Backend Settings</summary>
+                <div class="keys-advanced-body">
+                    <div class="form-group" style="margin-top: 0.75rem;">
+                        <label for="groq-key-input">Optional: Groq API Key (High-Speed Qwen AI Fallback)</label>
+                        <div class="input-with-icon-right">
+                            <input type="password" class="key-input" id="groq-key-input" placeholder="gsk_..." />
+                            <button type="button" class="key-eye-btn" data-target="groq-key-input" title="Toggle">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ocr-key-input">Optional: OCR.Space API Key (Image-to-Text Fallback)</label>
+                        <div class="input-with-icon-right">
+                            <input type="password" class="key-input" id="ocr-key-input" placeholder="K8..." />
+                            <button type="button" class="key-eye-btn" data-target="ocr-key-input" title="Toggle">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="backend-url-input">Custom Backend API URL (If Frontend is Hosted on Netlify)</label>
+                        <input type="url" class="key-input" id="backend-url-input" placeholder="e.g. https://your-backend.onrender.com (leave empty for default /api)" />
+                        <span class="file-hint" style="display:block; margin-top:4px;">Leave blank if using Netlify proxy redirect in netlify.toml.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred AI Extraction Strategy</label>
+                        <div class="radio-pill-group">
+                            <label class="radio-pill">
+                                <input type="radio" name="ai-engine-choice" value="auto" checked />
+                                <span>🔄 Smart Auto (Gemini Multi-Key with Groq Fallback)</span>
+                            </label>
+                            <label class="radio-pill">
+                                <input type="radio" name="ai-engine-choice" value="gemini" />
+                                <span>🌟 Gemini Multi-Key Rotation Only</span>
+                            </label>
+                            <label class="radio-pill">
+                                <input type="radio" name="ai-engine-choice" value="groq" />
+                                <span>⚡ Groq Qwen AI Only</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Action Buttons -->
+            <div class="keys-modal-actions">
+                <button type="button" id="test-keys-btn" class="btn-outline" style="flex: 1.2;">
+                    <span id="test-btn-text">🧪 Test & Validate Keys</span>
+                    <span class="loader hidden" id="test-keys-loader"></span>
+                </button>
+                <button type="button" id="save-keys-btn" class="btn-primary" style="flex: 1.5;">
+                    <span>💾 Save & Apply Keys</span>
+                </button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+                <button type="button" id="clear-keys-btn" class="btn-ghost-danger btn-sm">🗑️ Clear All Keys</button>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="link-hint">
+                    Get Free Gemini API Key ↗
+                </a>
+            </div>
+
+            <div id="keys-status-msg" class="status-message hidden" style="margin-top: 0.85rem;"></div>
+        </div>
+    </div>
+
+    <!-- NETLIFY & CLOUD DEPLOYMENT GUIDE MODAL -->
+    <div id="deploy-modal-overlay" class="login-modal-overlay hidden">
+        <div class="login-modal-card deploy-modal-card">
+            <button type="button" id="deploy-modal-close-btn" class="login-modal-close-btn" title="Close">&times;</button>
+            <div class="login-modal-header">
+                <div class="login-badge-icon" style="background: linear-gradient(135deg, rgba(0, 195, 187, 0.15), rgba(99, 102, 241, 0.15)); border-color: rgba(0, 195, 187, 0.3);">
+                    <span style="font-size: 2rem;">🚀</span>
+                </div>
+                <h2>Deploy CertiAI to Netlify</h2>
+                <p>Learn how to deploy CertiAI with Netlify frontend + Render backend in under 5 minutes.</p>
+            </div>
+
+            <!-- Tab Switcher for Deployment Options -->
+            <div class="deploy-tab-group">
+                <button type="button" class="deploy-tab-btn active" data-tab="tab-netlify-recommended">
+                    🌟 Recommended: Netlify + Render
+                </button>
+                <button type="button" class="deploy-tab-btn" data-tab="tab-netlify-direct">
+                    ⚡ Instant Drag & Drop
+                </button>
+                <button type="button" class="deploy-tab-btn" data-tab="tab-db-setup">
+                    📊 Standalone Excel Mode
+                </button>
+            </div>
+
+            <div class="deploy-tab-content active" id="tab-netlify-recommended">
+                <div class="deploy-step-box">
+                    <div class="step-badge">Architecture Overview</div>
+                    <p>Because CertiAI extracts large batches of certificates (200–400 images) with OCR and image processing, the optimal architecture is:</p>
+                    <ul class="deploy-check-list">
+                        <li><strong>Frontend (Fast Global CDN):</strong> Hosted on <strong>Netlify</strong> (100% Free)</li>
+                        <li><strong>Backend API (Persistent Node.js Server):</strong> Hosted on <strong>Render.com</strong> or Railway (100% Free)</li>
+                        <li><strong>Automatic Proxy:</strong> Netlify forwards all <code>/api/*</code> requests to Render transparently with 0 CORS issues!</li>
+                        <li><strong>Zero Database Required:</strong> No MySQL needed! Pure Excel spreadsheet generation and direct downloads for faculty members.</li>
+                    </ul>
+                </div>
+                <div class="deploy-steps-numbered">
+                    <div class="deploy-step">
+                        <span class="num">1</span>
+                        <div>
+                            <strong>Deploy Backend to Render:</strong>
+                            <p>Push your repository to GitHub. Go to <a href="https://dashboard.render.com" target="_blank" rel="noopener">dashboard.render.com</a> -> <strong>New Web Service</strong> -> Select your repo. Build Command: <code>npm install</code>, Start Command: <code>node server.js</code>.</p>
+                        </div>
+                    </div>
+                    <div class="deploy-step">
+                        <span class="num">2</span>
+                        <div>
+                            <strong>Deploy Frontend to Netlify:</strong>
+                            <p>Go to <a href="https://app.netlify.com" target="_blank" rel="noopener">app.netlify.com</a> -> <strong>Add new site</strong> -> <strong>Import an existing project</strong>. Publish directory: <code>public</code>. In <code>netlify.toml</code>, replace the Render URL with your own!</p>
+                        </div>
+                    </div>
+                    <div class="deploy-step">
+                        <span class="num">3</span>
+                        <div>
+                            <strong>Configure 3–4 Gemini API Keys:</strong>
+                            <p>Once deployed, faculty opens the web app and clicks <strong>🔑 API Keys</strong> to enter their 3–4 Gemini keys. Keys are saved securely in faculty browser session!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deploy-tab-content hidden" id="tab-netlify-direct">
+                <div class="deploy-step-box">
+                    <div class="step-badge">Instant Netlify Drag & Drop</div>
+                    <p>You can deploy the CertiAI frontend instantly without Git by dragging the <code>public/</code> folder into Netlify:</p>
+                    <ol style="margin-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+                        <li>Open <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">app.netlify.com/drop</a> in your browser</li>
+                        <li>Drag and drop the <code>public</code> folder from your project into the browser box</li>
+                        <li>Your site is instantly live on <code>https://your-site.netlify.app</code>!</li>
+                        <li>Open your live site, click <strong>🔑 API Keys</strong> -> Paste your Render backend URL and your 3–4 Gemini keys!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="deploy-tab-content hidden" id="tab-db-setup">
+                <div class="deploy-step-box">
+                    <div class="step-badge">Zero Database Architecture</div>
+                    <p>CertiAI operates in 100% Standalone Excel Mode. Faculty members can use it anywhere without installing, configuring, or connecting to MySQL:</p>
+                    <ul class="deploy-check-list">
+                        <li><strong>No MySQL Required:</strong> Zero cloud database setup, zero connection strings, and zero maintenance.</li>
+                        <li><strong>Instant Excel Downloads:</strong> All extracted certificates are formatted directly into clean, standardized <code>certificates.xlsx</code> spreadsheets.</li>
+                        <li><strong>Open Access:</strong> Any faculty member or student can open the app, supply their Gemini API keys, process certificates, and export reports immediately.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="deploy-modal-footer">
+                <button type="button" class="btn-primary" id="deploy-close-btn" style="width: 100%;">
+                    Got it, Close Guide
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ExcelJS library for frontend Excel generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

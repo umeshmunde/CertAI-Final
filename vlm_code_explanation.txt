@@ -1,0 +1,146 @@
+# Breaking Down the API & VLM Code
+
+Since your project revolves around data extraction, APIs, and Vision-Language Models (VLMs), this document breaks down exactly how the "brain" and "eyes" of your project—the **OCR API** and the **Google Gemini AI integrations** in your file `server.js`—actually work.
+
+---
+
+## Part 1: The "Eyes" (OCR API Integration)
+The first step of the journey is giving the computer the ability to "see". The OCR (Optical Character Recognition) engine acts as the digital eyes. Its only job is to look at the colored pixels of an image, identify the letters, and return a massive, unorganized paragraph of text.
+
+Here is a humanized breakdown of your `performOCR` function:
+
+```javascript
+// Function: Perform OCR using OCR.Space API
+async function performOCR(filePath) {
+    try {
+        // 1. Preparing the Package
+        // FormData is a tool used to bundle up files so they can be sent over the internet safely.
+        let data = new FormData();
+        
+        // We grab the certificate image file from your computer and drop it in the package.
+        data.append('file', fs.createReadStream(filePath));
+        
+        // We include your secret API key to prove you have a registered account.
+        data.append('apikey', process.env.OCR_API_KEY || 'helloworld');
+        
+        // We tell the OCR to automatically detect the language (like English, Hindi, etc.)
+        data.append('filetype', 'Auto'); 
+        
+        // 2. Making the Request
+        // We use 'axios' (a tool that sends web requests) to POST this package to the OCR API server. 
+        const response = await axios.post('https://api.ocr.space/parse/image', data, {
+            headers: { ...data.getHeaders() } // The headers simply tell the destination server to expect a file upload.
+        });
+        
+        // 3. Handling the Output
+        if (response.data.IsErroredOnProcessing) {
+            throw new Error('OCR API Error: ' + response.data.ErrorMessage);
+        }
+        
+        // If it successfully read the image, it locates the 'ParsedText' string and returns it!
+        if (response.data.ParsedResults && response.data.ParsedResults.length > 0) {
+            return response.data.ParsedResults[0].ParsedText;
+        }
+        return '';
+    } catch (err) {
+        throw new Error('OCR Failed: ' + detail);
+    }
+}
+```
+
+---
+
+## Part 2: The "Brain" (Gemini & VLM Code)
+Once the OCR engine successfully extracts text from a certificate, it usually looks like a chaotic, disorganized paragraph. 
+
+We need an AI (a Vision-Language Model) to conceptually "read" the text, understand what the event is, find the student's name, determine the skill level, and format it into a neat, easily readable package. Below is the `parseWithGemini` function.
+
+```javascript
+// Function: AI LLM Parser for unstructured certificate extraction
+async function parseWithGemini(ocrText, driveLink) {
+    try {
+        // ---------------------------------------------------------
+        // 1. PROMPT ENGINEERING
+        // ---------------------------------------------------------
+        // We give the AI a very specific instruction sheet. We explicitly ask it to figure out 
+        // inferred details like the "Domain" and "Proficiency" level based on context.
+        const prompt = `You are a data extractor. Analyze the following unstructured text from a certificate...
+        Extract the following fields accurately:
+        - Name_of_Student
+        - Activity_Event ...
+        Return ONLY a valid JSON object.
+        Certificate Raw Text:
+        ${ocrText}`;
+
+        let response;
+        let attempt = 0;
+        const maxRetries = 5;
+        
+        // ---------------------------------------------------------
+        // 2. THE INTERNET CALL & SMART RETRIES
+        // ---------------------------------------------------------
+        // Since Google's free APIs get overwhelmed easily, we use a 'while' loop to protect our app.
+        while (attempt <= maxRetries) {
+            try {
+                // We send a secure POST request to the Google 'gemini-2.5-flash' VLM.
+                response = await axios.post(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+                    { "contents": [{"parts":[{"text": prompt}]}] }, // Payload containing the instruction text
+                    { headers: { "Content-Type": "application/json" } }
+                );
+                break; // If successful, we successfully "break" out of the loop and continue!
+            } catch (err) {
+                // If Google returns an error saying "too many requests" (Error 429)...
+                const msg = err.response?.data?.error?.message || "";
+                if (msg.includes("high demand") || err.response?.status === 503 || err.response?.status === 429) {
+                    if (attempt === maxRetries) throw err; 
+                    
+                    // EXPONENTIAL BACKOFF: The code mathematically waits longer each time it fails. 
+                    // It waits 2s, then 4s, then 8s before trying again.
+                    const waitTime = Math.pow(2, attempt + 1) * 1000; 
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                    attempt++;
+                } else {
+                    throw err; // Stop if it's a completely different error (like a bad password)
+                }
+            }
+        }
+
+        // ---------------------------------------------------------
+        // 3. CLEANING & FORMATTING
+        // ---------------------------------------------------------
+        // We unpack the massive response from Google to find the exact text Gemini wrote back.
+        const responseText = response.data.candidates[0].content.parts[0].text;
+        
+        // AI often adds markdown formatting (like "```json"). We use replace() to digitally strip it away.
+        let cleanText = responseText.replace(/```json/gi, '').replace(/```/g, '').trim();
+        
+        // Convert clean text string into a real JavaScript Object using JSON.parse
+        let jsonData = JSON.parse(cleanText);
+        
+        // ---------------------------------------------------------
+        // 4. FINAL SAFETY CHECKS
+        // ---------------------------------------------------------
+        jsonData.Google_Drive_Link = driveLink || "N/A";
+        
+        // Ensure every field expected by the Excel sheet exists. If empty, fill it with "N/A".
+        const fields = ["Name_of_Student", "Activity_Event", "Details", "Organized_by", "From_Date", "To_Date", "Venue", "Level", "Google_Drive_Link", "Achievement", "Domain", "Proficiency"];
+        fields.forEach(f => {
+            if (!jsonData[f]) jsonData[f] = "N/A";
+        });
+        
+        return jsonData;
+        
+    } catch (err) {
+        throw new Error('AI Parsing failed: ' + err.message);
+    }
+}
+```
+
+---
+
+## How It All Comes Together
+In the main execution block of your server interface (`app.post('/api/extract')`), the system perfectly links these two components together:
+1. It waits for the **OCR API (`performOCR`)** to finish, providing the messy string of text.
+2. It takes that raw string and immediately hands it to the **VLM API (`parseWithGemini`)**.
+3. The end result is beautifully formatted, contextualized JSON data that is directly written to the end-user's Excel spreadsheet!

@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables & secrets (CRITICAL: Do not commit API keys)
+.env
+.env.local
+*.env
+
+# Uploads & Temp files
+uploads/*
+!uploads/.gitkeep
+downloads/*
+!downloads/.gitkeep
+
+# System & IDE files
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Scratch & debug scripts
+check_models.js
+test_keys.js
+debug_test.js
+
