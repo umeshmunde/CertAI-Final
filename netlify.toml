@@ -12,7 +12,7 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://certai-api.onrender.com/api/:splat"
+  to = "https://certai-backend.onrender.com/api/:splat"
   status = 200
   force = false
 
