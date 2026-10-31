@@ -15,7 +15,7 @@
         rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.2">
 </head>
 
 <body>
@@ -45,17 +45,17 @@
                 </svg>
                 <span class="brand-text">Certi<span class="highlight">AI</span></span>
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="main-nav-links">
                 <li><a href="#home" class="nav-item active" data-target="home">Home</a></li>
                 <li><a href="#dashboard" class="nav-item" data-target="dashboard">Dashboard</a></li>
-                <li><a href="#extractor" class="nav-item" data-target="extractor">App</a></li>
-                <li><a href="#history" class="nav-item" data-target="history">All Records</a></li>
-                <li><a href="#reports-generator" class="nav-item" data-target="reports-generator">Report Generator</a></li>
-                <li><a href="#reports" class="nav-item" data-target="reports">Achievements</a></li>
-                <li><a href="#analytics" class="nav-item" data-target="analytics">Learner Analytics</a></li>
+                <li><a href="#extractor" class="nav-item" data-target="extractor">Extractor</a></li>
+                <li><a href="#history" class="nav-item" data-target="history">Records</a></li>
+                <li><a href="#reports-generator" class="nav-item" data-target="reports-generator">Reports</a></li>
+                <li><a href="#reports" class="nav-item" data-target="reports">Merit</a></li>
+                <li><a href="#analytics" class="nav-item" data-target="analytics">Analytics</a></li>
                 <li><a href="#about" class="nav-item" data-target="about">About</a></li>
             </ul>
-            <div class="user-auth-widget" style="display: flex; align-items: center; gap: 8px;">
+            <div class="user-auth-widget">
                 <button type="button" id="open-keys-modal-btn" class="nav-key-action-btn" title="Configure 3–4 Gemini API Keys for Rotation">
                     <span class="key-icon-spin">🔑</span>
                     <span class="btn-label">API Keys</span>
@@ -64,11 +64,11 @@
                 <button type="button" id="open-deploy-modal-btn" class="nav-deploy-action-btn" title="View Netlify & Cloud Deployment Guide">
                     <span>🚀 Deploy</span>
                 </button>
-                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 600; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
-                    <span>⚡</span> Open Faculty Access
+                <span class="nav-access-badge" title="Open Faculty Access Active">
+                    <span>⚡</span><span class="badge-text">Faculty Access</span>
                 </span>
             </div>
-            <div class="mobile-toggle">
+            <div class="mobile-toggle" id="mobile-toggle-btn" title="Menu">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -1157,7 +1157,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- ExcelJS library for frontend Excel generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=2.1"></script>
 </body>
 
 </html>

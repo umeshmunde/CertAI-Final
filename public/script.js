@@ -485,11 +485,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
     const ctaBtns = document.querySelectorAll('.cta-btn');
     const pageSections = document.querySelectorAll('.page-section');
+    const mobileToggleBtn = document.getElementById('mobile-toggle-btn');
+    const mainNavLinks = document.getElementById('main-nav-links');
+
+    if (mobileToggleBtn && mainNavLinks) {
+        mobileToggleBtn.addEventListener('click', () => {
+            mainNavLinks.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileToggleBtn.contains(e.target) && !mainNavLinks.contains(e.target)) {
+                mainNavLinks.classList.remove('open');
+            }
+        });
+    }
     
     // Function to change active page
     function navigateToPage(targetId) {
         if (!targetId) return;
 
+        if (mainNavLinks) {
+            mainNavLinks.classList.remove('open');
+        }
 
         // Update nav links
         navItems.forEach(item => {
