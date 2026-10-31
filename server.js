@@ -12,6 +12,14 @@ const sharp = require('sharp');
 const Tesseract = require('tesseract.js');
 const pdfParse = require('pdf-parse');
 
+// Global Safety Guards: Prevent unhandled worker or async errors from crashing the process
+process.on('uncaughtException', (err) => {
+    console.error('[Safety Net] Caught Unhandled Exception:', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+    console.error('[Safety Net] Caught Unhandled Rejection:', reason?.message || reason);
+});
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -59,10 +67,10 @@ const downloadDir = path.join(__dirname, 'downloads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 if (!fs.existsSync(downloadDir)) fs.mkdirSync(downloadDir);
 
-// Multer setup for file uploads
+// Multer setup for file uploads (uses absolute uploadDir)
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '_' + Math.random().toString(36).substring(7) + path.extname(file.originalname));
@@ -214,6 +222,7 @@ async function downloadFromDrive(downloadUrl, dest) {
 
 // Perform Local FREE OCR using Tesseract.js and pdf-parse
 async function performLocalOCR(filePath) {
+    if (!fs.existsSync(filePath)) return '';
     const ext = path.extname(filePath).toLowerCase();
 
     // Direct text extraction for PDF documents
@@ -226,17 +235,20 @@ async function performLocalOCR(filePath) {
                 return pdfData.text;
             }
         } catch (pdfErr) {
-            console.warn(`[PDF Direct Parse warning]: ${pdfErr.message}, falling back to Tesseract OCR...`);
+            console.warn(`[PDF Direct Parse warning]: ${pdfErr.message}`);
         }
     }
 
-    // Free Offline Image OCR using Tesseract.js
+    // Free Offline Image OCR using Tesseract.js (safely guarded against worker crashes)
     try {
         console.log(`[Tesseract Free Local OCR] Processing '${path.basename(filePath)}'...`);
-        const { data: { text } } = await Tesseract.recognize(filePath, 'eng');
-        return text || '';
+        const result = await Tesseract.recognize(filePath, 'eng').catch(tessErr => {
+            console.warn('[Tesseract worker warning]:', tessErr.message);
+            return null;
+        });
+        return result?.data?.text || '';
     } catch (err) {
-        console.error('[Tesseract Free Local OCR Error]:', err.message);
+        console.warn('[Tesseract Free Local OCR Warning]:', err.message);
         return '';
     }
 }
@@ -1259,39 +1271,53 @@ async function processSingleFileHelper({ filePath, driveLink, originalName, skip
         } catch (sharpErr) {}
     }
 
-    ocrText = await performOCR(filePath);
-
     const availableGemini = getAllGeminiKeys(requestKeys);
     const effectiveGroq = requestGroqKey || customGroqKey || process.env.GROQ_API_KEY;
     let engineUsed = 'Heuristic';
 
-    // 1. Try Gemini Multi-Key Rotation if configured
-    if (availableGemini.length > 0 && (activeAiEngine === 'gemini' || activeAiEngine === 'auto')) {
+    // 1. Ultra-Fast Direct Vision AI Path (Zero OCR needed, parses directly from image pixels)
+    if (ext !== '.pdf' && availableGemini.length > 0 && (activeAiEngine === 'gemini' || activeAiEngine === 'auto')) {
         try {
-            console.log(`⚡ [Gemini Multi-Key AI] Parsing '${originalName || path.basename(filePath)}' with rotating keys...`);
-            parsedData = await parseWithGemini(ocrText, driveLink, requestKeys);
-            engineUsed = `Gemini (${parsedData._keyUsed || 'Rotated'})`;
-        } catch (geminiErr) {
-            console.warn(`[Gemini Rotation Notice]: ${geminiErr.message}. Trying Groq/Heuristic fallback...`);
+            console.log(`⚡ [Gemini Vision AI] Processing '${originalName || path.basename(filePath)}' directly with VLM...`);
+            parsedData = await parseImageWithGeminiVLM(apiBuffer, apiMimeType, driveLink, requestKeys);
+            engineUsed = `Gemini Vision (${parsedData._keyUsed || 'Rotated'})`;
+        } catch (vlmErr) {
+            console.warn(`[Gemini Vision Notice]: ${vlmErr.message}. Falling back to OCR...`);
         }
     }
 
-    // 2. Fallback to Groq Qwen AI
-    if (!parsedData && effectiveGroq && (activeAiEngine === 'groq' || activeAiEngine === 'auto')) {
-        try {
-            console.log(`⚡ [Groq Qwen AI] Parsing '${originalName || path.basename(filePath)}' with 99%+ accuracy...`);
-            parsedData = await executeWithRetry(() => parseWithGroqQwen(ocrText, driveLink, effectiveGroq));
-            engineUsed = 'Groq Qwen AI';
-        } catch (groqErr) {
-            console.warn(`Groq Qwen AI failed for ${originalName || path.basename(filePath)}, falling back to heuristic parser:`, groqErr.message);
-        }
-    }
-
-    // 3. Fallback to Heuristic regex parser
+    // 2. Text-Based AI / OCR Fallback (If Vision AI was skipped or failed)
     if (!parsedData) {
-        console.log(`[Heuristic Parser] Processing '${originalName || path.basename(filePath)}'...`);
-        parsedData = parseCertificateText(ocrText, driveLink);
-        engineUsed = 'Heuristic Parser';
+        ocrText = await performOCR(filePath);
+
+        // Try Gemini Text Parser if available
+        if (availableGemini.length > 0 && (activeAiEngine === 'gemini' || activeAiEngine === 'auto')) {
+            try {
+                console.log(`⚡ [Gemini Text AI] Parsing OCR text for '${originalName || path.basename(filePath)}'...`);
+                parsedData = await parseWithGemini(ocrText, driveLink, requestKeys);
+                engineUsed = `Gemini (${parsedData._keyUsed || 'Rotated'})`;
+            } catch (geminiErr) {
+                console.warn(`[Gemini Text Notice]: ${geminiErr.message}. Trying Groq/Heuristic...`);
+            }
+        }
+
+        // Try Groq Qwen AI fallback
+        if (!parsedData && effectiveGroq && (activeAiEngine === 'groq' || activeAiEngine === 'auto')) {
+            try {
+                console.log(`⚡ [Groq Qwen AI] Parsing '${originalName || path.basename(filePath)}'...`);
+                parsedData = await executeWithRetry(() => parseWithGroqQwen(ocrText, driveLink, effectiveGroq));
+                engineUsed = 'Groq Qwen AI';
+            } catch (groqErr) {
+                console.warn(`Groq Qwen AI notice:`, groqErr.message);
+            }
+        }
+
+        // Final Heuristic regex fallback
+        if (!parsedData) {
+            console.log(`[Heuristic Parser] Processing '${originalName || path.basename(filePath)}'...`);
+            parsedData = parseCertificateText(ocrText, driveLink);
+            engineUsed = 'Heuristic Parser';
+        }
     }
 
     parsedData.file_hash = fileHash;
@@ -1634,6 +1660,14 @@ app.post('/api/keys/test', async (req, res) => {
                 return { index: idx, status: 'empty', message: 'No key provided' };
             }
             const masked = maskApiKey(trimmed);
+            if (!trimmed.startsWith('AIzaSy')) {
+                return {
+                    index: idx,
+                    keyMasked: masked,
+                    status: 'invalid',
+                    message: 'Invalid Format (Google AI Studio keys start with "AIzaSy...")'
+                };
+            }
             const startTime = Date.now();
             
             const testModels = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-1.5-flash', 'gemini-2.0-flash'];

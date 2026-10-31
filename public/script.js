@@ -10,7 +10,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (customBase) {
             return customBase.replace(/\/$/, '') + endpoint;
         }
+        // When deployed on Netlify, connect directly to the Render backend to bypass edge timeouts and buffering
+        if (window.location.hostname.includes('netlify.app')) {
+            return 'https://certai-backend.onrender.com' + endpoint;
+        }
         return endpoint;
+    }
+
+    // Safe Response Parser: Handles 502/504 spin-up states, empty responses, and non-JSON gracefully
+    async function safeParseResponse(response, defaultMsg = 'Server request failed.') {
+        const text = await response.text();
+        if (!text || !text.trim()) {
+            if (!response.ok) {
+                if (response.status === 502 || response.status === 504 || response.status === 503) {
+                    throw new Error(`The backend on Render is currently spinning up from sleep (HTTP ${response.status}). Free-tier instances sleep after inactivity. Please wait 15–20 seconds and try extracting again.`);
+                }
+                throw new Error(`Server returned HTTP ${response.status} with an empty response.`);
+            }
+            return {};
+        }
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            if (!response.ok) {
+                if (response.status === 502 || response.status === 504) {
+                    throw new Error(`Backend server is waking up or temporarily busy (HTTP ${response.status}). Please retry in 15 seconds.`);
+                }
+                throw new Error(`Server error (${response.status}): ${text.substring(0, 120)}`);
+            }
+            throw new Error(defaultMsg);
+        }
     }
 
     function getFacultyAuthHeaders() {
@@ -148,6 +177,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
         });
+
+        // Real-time format check: Google AI Studio keys start with "AIzaSy"
+        document.querySelectorAll('#gemini-keys-container .key-input').forEach(inp => {
+            inp.oninput = () => {
+                const idx = inp.id.replace('key-input-', '');
+                const badge = document.getElementById(`key-status-${idx}`);
+                const val = inp.value.trim();
+                if (!badge) return;
+                if (!val) {
+                    badge.textContent = '⚪ Not Tested';
+                    badge.className = 'key-status-badge untested';
+                } else if (!val.startsWith('AIzaSy')) {
+                    badge.textContent = '⚠️ Must start with AIzaSy...';
+                    badge.className = 'key-status-badge invalid';
+                } else {
+                    badge.textContent = '⚪ Ready to Test';
+                    badge.className = 'key-status-badge untested';
+                }
+            };
+        });
     }
 
     function getEnteredGeminiKeys() {
@@ -182,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Also query backend status to check server-loaded keys
         fetch(getApiUrl('/api/keys/status'))
-            .then(res => res.json())
+            .then(res => safeParseResponse(res))
             .then(statusData => {
                 if (statusData.success && statusData.totalGeminiKeys > 0 && keys.length === 0) {
                     // Pre-fill masked placeholders if env has keys but UI was empty
@@ -269,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 });
 
-                const data = await res.json();
+                const data = await safeParseResponse(res, 'Test request failed');
                 if (!res.ok) throw new Error(data.error || 'Test request failed');
 
                 let validCount = 0;
@@ -344,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         activeEngine: selectedEngine
                     })
                 });
-                const resData = await res.json();
+                const resData = await safeParseResponse(res, 'Save request failed');
 
                 if (keysStatusMsg) {
                     keysStatusMsg.textContent = `💾 Successfully saved ${keys.length} Gemini keys! Multi-key rotation is active for all extractions.`;
@@ -700,7 +749,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!confirm('Are you sure you want to clear the Excel spreadsheet and cached records? This will allow you to start a fresh batch of certificate extractions.')) return;
             try {
                 const res = await fetch(getApiUrl('/api/clear-db'), { method: 'POST' });
-                const data = await res.json();
+                const data = await safeParseResponse(res, 'Failed to reset Excel spreadsheet.');
                 showStatus(data.message || 'Excel spreadsheet and cache reset successfully!', 'success');
                 fetchAllRecords();
                 fetchDashboardStats();
@@ -757,7 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: formData
             });
 
-            const result = await response.json();
+            const result = await safeParseResponse(response, 'Failed to process certificate.');
             if (!response.ok) throw new Error(result.error || 'Failed to process certificate.');
 
             if (result.isDuplicate) {
@@ -864,7 +913,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData
                 });
 
-                const result = await response.json();
+                const result = await safeParseResponse(response, 'Failed to process batch.');
 
                 if (!response.ok) {
                     errorCount += rawChunk.length;
@@ -927,7 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: formData
             });
 
-            const result = await response.json();
+            const result = await safeParseResponse(response, 'Failed to process ZIP archive.');
 
             if (!response.ok) {
                 throw new Error(result.error || 'Failed to process ZIP archive.');
@@ -977,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: formData
             });
 
-            const result = await response.json();
+            const result = await safeParseResponse(response, 'Failed to process Google Drive link.');
             if (!response.ok) throw new Error(result.error || 'Failed to process Google Drive link.');
 
             if (result.isBatch) {
@@ -1427,7 +1476,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAllRecords() {
         try {
             const response = await fetch(getApiUrl('/api/records'));
-            allRecords = await response.json();
+            const data = await safeParseResponse(response, 'Failed to load records.');
+            allRecords = Array.isArray(data) ? data : [];
             console.log("Records loaded:", allRecords.length);
             
             renderHistoryTable(allRecords);
@@ -1566,11 +1616,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(getApiUrl('/api/records'))
             ]);
 
-            const stats = await statsRes.json();
-            const records = await recordsRes.json();
+            const stats = await safeParseResponse(statsRes, 'Failed to load stats.');
+            const records = await safeParseResponse(recordsRes, 'Failed to load records.');
 
             // Update allRecords cache
-            allRecords = records;
+            allRecords = Array.isArray(records) ? records : [];
 
             // 1. Update KPI Card Values
             document.getElementById('stat-total-uploads').textContent = stats.total || 0;
@@ -1800,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const url = getApiUrl(`/api/reports/custom?participantType=${encodeURIComponent(participantType)}&eventType=${encodeURIComponent(eventType)}`);
             const res = await fetch(url);
-            const data = await res.json();
+            const data = await safeParseResponse(res, 'Failed to fetch report.');
             
             const records = data.records || [];
             if (reportCountBadge) reportCountBadge.textContent = `${records.length} Records Found`;

@@ -14,7 +14,7 @@
   from = "/api/*"
   to = "https://certai-backend.onrender.com/api/:splat"
   status = 200
-  force = false
+  force = true
 
 [[redirects]]
   from = "/*"
